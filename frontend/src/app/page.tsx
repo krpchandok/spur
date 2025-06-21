@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import axios from 'axios'
+import LoginPage from './Login/page'
 
 export default function HomePage() {
   const { address, isConnected } = useAccount()
@@ -37,8 +38,6 @@ export default function HomePage() {
     checkRole()
   }, [isConnected, address])
 
-  const router = useRouter()
-
   const loginPage = () => {
     router.push("/Login")
   }
@@ -48,6 +47,7 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold">Welcome</h1>
       <p>Please connect your wallet to continue.</p>
       <ConnectButton />
+      <LoginPage /> 
       {checking && <p className="mt-4 text-sm text-gray-500">Checking your role...</p>}
     </div>
   )
