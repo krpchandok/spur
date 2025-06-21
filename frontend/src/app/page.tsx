@@ -1,50 +1,41 @@
-'use client';
+'use client'
 
-import { useReadContract, useWriteContract, useAccount } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "./config/web3";
-import { useRouter } from 'next/navigation';
-import { Router } from 'next/router';
+import { useAccount } from 'wagmi'
+import { useWalletContext } from './providers/WalletProvider'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import axios from 'axios'
 
-export default function Home() {
-  const { address, isConnected } = useAccount();
-  const { writeContract } = useWriteContract();
+export default function HomePage() {
+  const { address, isConnected } = useAccount()
+  const { setWallet } = useWalletContext()
+  const router = useRouter()
+  const [checking, setChecking] = useState(false)
 
-  // Read student tokens
-  const { data, error } = useReadContract({
-    address: CONTRACT_ADDRESS,
-    abi: CONTRACT_ABI,
-    functionName: 'getStudentTokens',
-    args: [address || '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'],
-  });
+  useEffect(() => {
+    const checkRole = async () => {
+      if (!isConnected || !address) return
 
-  const mintTestNFT = async () => {
-    if (!address) {
-      alert('Please connect your wallet first');
-      return;
+      setWallet(address)
+      setChecking(true)
+
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-role/${address}`)
+        const role = res.data.role
+
+        if (role === 'admin') router.push('/admin/mint')
+        else if (role === 'student') router.push('/student/wallet')
+        else console.warn('Unknown role:', role)
+      } catch (err) {
+        console.error('Failed to fetch role:', err)
+      } finally {
+        setChecking(false)
+      }
     }
 
-    try {
-      await writeContract({
-        address: CONTRACT_ADDRESS,
-        abi: CONTRACT_ABI,
-        functionName: 'mintAchievement',
-        args: [
-          address, // student
-          'Math Excellence', // activityName
-          'Academic', // activityType
-          'Test School', // schoolName
-          'https://example.com/metadata.json' // tokenURI
-        ],
-      });
-    } catch (err) {
-      console.error('Mint error:', err);
-    }
-  };
-
-  console.log('Connected address:', address);
-  console.log('Contract data:', data);
-  console.log('Contract error:', error);
+    checkRole()
+  }, [isConnected, address])
 
   const router = useRouter()
 
@@ -54,32 +45,10 @@ export default function Home() {
 
   return (
     <div className="p-8">
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4" onClick={()=>loginPage()} >Login page Test</button>
-      <h1 className="text-2xl font-bold mb-4">Education NFT Test</h1>
-      
-      <div className="space-y-4">
-        {/* RainbowKit Connect Button */}
-        <ConnectButton />
-        
-        <div>
-          <p><strong>Connected:</strong> {address || 'Not connected'}</p>
-          <p><strong>Network:</strong> {isConnected ? 'Connected' : 'Disconnected'}</p>
-          <p><strong>Tokens:</strong> {data ? `[${data.join(', ')}]` : 'Loading...'}</p>
-          {error && <p className="text-red-500">Error: {error.message}</p>}
-        </div>
-
-        <button 
-          onClick={mintTestNFT}
-          disabled={!isConnected}
-          className={`px-4 py-2 rounded ${
-            isConnected 
-              ? 'bg-blue-500 text-white hover:bg-blue-600' 
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          Mint Test NFT
-        </button>
-      </div>
+      <h1 className="text-3xl font-bold">Welcome</h1>
+      <p>Please connect your wallet to continue.</p>
+      <ConnectButton />
+      {checking && <p className="mt-4 text-sm text-gray-500">Checking your role...</p>}
     </div>
-  );
+  )
 }

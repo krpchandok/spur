@@ -11,6 +11,8 @@
   "dependencies": {
     "@fontsource/manrope": "^5.2.6",
     "@rainbow-me/rainbowkit": "^2.2.8",
+    "@supabase/supabase-js": "^2.50.0",
+    "axios": "^1.10.0",
     "connectkit": "^1.9.1",
     "next": "15.3.4",
     "react": "^18.3.1",
