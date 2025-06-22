@@ -1,27 +1,16 @@
 'use client'
 
-<<<<<<< HEAD
-import Nav from "../components/Nav"
-=======
 import Nav from "@/app/Components/Nav"
->>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
 import Link from "next/link"
 
 function AdminDashboard() {
   return (<>
     <Nav />
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 gap-8 py-8">
-<<<<<<< HEAD
-
-      <div className="flex flex-col items-center justify-center gap-10 w-full max-w-5xl px-4">
-        <h1 className="text-5xl font-light text-white tracking-wider">Dashboard</h1>
-
-=======
       
       <div className="flex flex-col items-center justify-center gap-10 w-full max-w-5xl px-4">
         <h1 className="text-5xl font-light text-white tracking-wider">Dashboard</h1>
         
->>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
 
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 flex flex-col text-center items-center gap-5 transform hover:scale-105 transition-transform duration-300">
@@ -35,11 +24,7 @@ function AdminDashboard() {
               </button>
             </Link>
           </div>
-<<<<<<< HEAD
-
-=======
           
->>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
           {/* Search Card */}
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 flex flex-col text-center items-center gap-5 transform hover:scale-105 transition-transform duration-300">
             <h2 className="text-3xl font-light text-white tracking-wide">Search</h2>
@@ -60,8 +45,4 @@ function AdminDashboard() {
   )
 }
 
-<<<<<<< HEAD
 export default AdminDashboard
-=======
-export default AdminDashboard
->>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
