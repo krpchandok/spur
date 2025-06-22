@@ -41,7 +41,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const { error } = await supabase.from('users').insert([{ wallet, name, role }])
+    const { error } = await supabase.from('SPURHACK USERS').insert([{ wallet, name, role }])
     if (error) {
       console.error('Supabase error:', error)
       return res.status(500).json({ error: error.message })
@@ -239,7 +239,7 @@ export const getUserRole = async (req: Request, res: Response) => {
 
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('SPURHACK USERS')
       .select('role')
       .eq('wallet', wallet)
       .single();
@@ -260,7 +260,7 @@ export const getUserName = async (req: Request, res: Response) => {
 
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('SPURHACK USERS')
       .select('name')
       .eq('wallet', wallet)
       .single();
@@ -280,7 +280,7 @@ export const getUserName = async (req: Request, res: Response) => {
 export const getAllStudents = async (_req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('SPURHACK USERS')
       .select('wallet, name')
       .eq('role', 'student');
 
