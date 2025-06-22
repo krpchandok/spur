@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
@@ -17,6 +17,13 @@ const AdminMintNFT: React.FC = () => {
   const { address, isConnected } = useAccount()
   const [status, setStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  // Automatically connect wallet if disconnected
+  useEffect(() => {
+    if (!wallet && isConnected && address) {
+      setWallet(address)
+    }
+  }, [wallet, address, isConnected, setWallet])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -45,6 +52,13 @@ const AdminMintNFT: React.FC = () => {
       )
 
       setStatus(res.data.message || 'Minted successfully!')
+      // Reset form on success
+      setForm({
+        studentWallet: '',
+        activityName: '',
+        activityType: '',
+        tokenURI: '',
+      })
     } catch (err: any) {
       console.error(err)
       setStatus(err.response?.data?.error || 'Minting failed')
@@ -54,80 +68,102 @@ const AdminMintNFT: React.FC = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Mint Achievement NFT</h1>
-
-      {address ? (
-        <p className="text-sm text-gray-600 mb-2">
-          <strong>Connected Admin Wallet:</strong> {address}
-        </p>
-      ) : (
-        <p className="text-red-600 mb-2">Please connect your wallet to mint.</p>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white shadow-md p-4 rounded-xl">
-        <input
-          type="text"
-          name="studentWallet"
-          placeholder="Student Wallet Address"
-          value={form.studentWallet}
-          onChange={handleChange}
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          type="text"
-          name="activityName"
-          placeholder="Activity Name (e.g. Chess Club)"
-          value={form.activityName}
-          onChange={handleChange}
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <select
-          name="activityType"
-          value={form.activityType}
-          onChange={handleChange}
-          required
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option value="">Select Activity Type</option>
-          <option value="Club">Club</option>
-          <option value="Hackathon">Hackathon</option>
-          <option value="Sports">Sports</option>
-          <option value="Volunteer">Volunteer</option>
-        </select>
-        <input
-          type="text"
-          name="tokenURI"
-          placeholder="Token Metadata URI (e.g. IPFS link)"
-          value={form.tokenURI}
-          onChange={handleChange}
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
-        <button
-          type="submit"
-          disabled={!address || loading}
-          className={`w-full px-4 py-2 rounded ${
-            address
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          {loading ? 'Minting...' : 'Mint NFT'}
+    <div className="flex flex-col min-h-screen bg-[#221C3E] text-gray-300">
+      <header className="flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Legitamint</h1>
+        <button className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
+          Home
         </button>
-      </form>
+      </header>
 
-      {status && (
-        <p
-          className={`mt-4 text-center ${
-            status.toLowerCase().includes('success') ? 'text-green-600' : 'text-red-600'
-          }`}
-        >
-          {status}
-        </p>
-      )}
+      <main className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-2xl bg-[#2E2550] p-6 sm:p-8 rounded-2xl shadow-2xl">
+          <h2 className="text-3xl font-bold text-white mb-2 text-center">
+            Mint Achievement NFT
+          </h2>
+          {address ? (
+            <p className="text-sm text-purple-300 mb-6 text-center">
+              Minting as: <strong className="text-white break-all">{address}</strong>
+            </p>
+          ) : (
+            <p className="text-red-400 mb-6 text-center">
+              Please connect your admin wallet to mint an NFT.
+            </p>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <input
+                type="text"
+                name="studentWallet"
+                placeholder="Student Wallet Address"
+                value={form.studentWallet}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg bg-white/5 border-purple-400/30 border p-3 text-sm text-white focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent transition"
+              />
+              <input
+                type="text"
+                name="activityName"
+                placeholder="Activity Name (e.g. Chess Club)"
+                value={form.activityName}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg bg-white/5 border-purple-400/30 border p-3 text-sm text-white focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent transition"
+              />
+            </div>
+            <select
+              name="activityType"
+              value={form.activityType}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg bg-white/5 border-purple-400/30 border p-3 text-sm text-white focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent transition appearance-none"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+              }}
+            >
+              <option value="" disabled>Select Activity Type</option>
+              <option value="Club">Club</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Sports">Sports</option>
+              <option value="Volunteer">Volunteer</option>
+            </select>
+            <input
+              type="text"
+              name="tokenURI"
+              placeholder="Token Metadata URI (e.g. IPFS link)"
+              value={form.tokenURI}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg bg-white/5 border-purple-400/30 border p-3 text-sm text-white focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent transition"
+            />
+            <button
+              type="submit"
+              disabled={!address || loading}
+              className="w-full px-4 py-3 rounded-lg text-base font-semibold transition-all disabled:bg-gray-500/40 disabled:cursor-not-allowed bg-[#6D28D9] text-white hover:bg-[#5B21B6]"
+            >
+              {loading ? 'Minting...' : 'Mint NFT'}
+            </button>
+          </form>
+
+          {status && (
+            <div className="mt-6 text-center">
+              <p
+                className={`px-4 py-2 rounded-lg inline-block ${
+                  status.toLowerCase().includes('success')
+                    ? 'bg-green-500/20 text-green-300'
+                    : 'bg-red-500/20 text-red-300'
+                }`}
+              >
+                {status}
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   )
 }

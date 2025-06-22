@@ -4,51 +4,58 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
+import Token from '../../Components/Token'
+import Folder from '../../Components/Folder'
 
 export default function StudentWalletPage() {
   const { wallet, setWallet } = useWalletContext()
   const { address, isConnected } = useAccount()
-  const [achievements, setAchievements] = useState<any[]>([])
+  const [achievements, setAchievements] = useState<any[]>(["test", "test", "test1", "test2", "test3", "test4", "test5"])
   const [error, setError] = useState<string | null>(null)
 
-  // fallback in case wallet context is empty (e.g. page refresh)
   useEffect(() => {
     if (!wallet && isConnected && address) {
       setWallet(address)
     }
   }, [wallet, address, isConnected, setWallet])
 
-  useEffect(() => {
-    const fetchAchievements = async () => {
-      if (!wallet) return
-
-      return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/achievements/${wallet}`).then((res) => {
-          setAchievements(res.data.achievements)
-        }).catch((err: any) => {
-        console.error('Fetch error:', err)
-        setError('Failed to fetch achievements')
-      })
-    }
-
-    fetchAchievements()
-  }, [wallet])
-
-  if (!wallet) return <p>Wallet not connected.</p>
+  //if (!wallet) return <p>Wallet not connected.</p>
   if (error) return <p className="text-red-500">{error}</p>
 
   return (
-    <div>
-      <h2>Your Achievements</h2>
-      {achievements.length === 0 ? (
-        <p>No achievements found.</p>
-      ) : (
-        achievements.map((a, i) => (
-          <div key={i}>
-            <h3>{a.activityName}</h3>
-            <p>{a.activityType} | Issued by: {a.issuedBy}</p>
+    <div className="flex min-h-screen bg-[#221C3E] text-gray-300">
+      <div className="flex flex-col flex-1">
+        {/* Header */}
+        <header className="flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">
+            VouchU
+          </h1>
+          <button className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
+            Home
+          </button>
+        </header>
+
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+          <div className="w-full max-w-4xl">
+            <div className="lg:col-span-7">
+              <h2 className="text-2xl font-bold mb-4 text-white">My Tokens</h2>
+              <div className="bg-[#2E2550] p-6 rounded-lg shadow-2xl">
+                <div className="space-y-4">
+                  <Folder />
+                  <Folder />
+                  <Folder />
+                </div>
+
+                <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-8">
+                  {achievements.map((a, i) => (
+                    <Token key={i} />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        ))
-      )}
+        </div>
+      </div>
     </div>
   )
 }
