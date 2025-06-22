@@ -1,8 +1,11 @@
 import express from 'express'
 import cors from 'cors'
-import { registerUser, mintAchievement, getStudentAchievements, getUserRole, generateProfile } from './routes'
+import multer from 'multer'
+import { registerUser, mintAchievement, getStudentAchievements, getUserRole, generateProfile, getUserName } from './routes'
 
 const app = express()
+const upload = multer()
+
 app.use(cors({
     origin: 'http://localhost:3000',
   }))
@@ -13,10 +16,11 @@ app.get('/', (_req, res) => {
 })
 
 app.post('/register', registerUser)
-app.post('/mint', mintAchievement)
 app.get('/achievements/:wallet', getStudentAchievements)
 app.get('/generate-profile/:wallet', generateProfile)
 app.get('/get-role/:wallet', getUserRole);
+app.get('/get-name/:wallet', getUserName);
+app.post('/mint', upload.single('image'), mintAchievement)
 
 
 

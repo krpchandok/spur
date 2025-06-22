@@ -31,13 +31,13 @@ export default function TopNav() {
 
   return (
     <header className="w-full bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-800">NFT Dashboard</h2>
+      <h2 className="text-xl font-semibold text-gray-800">LEGITIMINT</h2>
 
       {isConnected && (
         <div className="flex items-center gap-4">
           <button
             onClick={goToProfile}
-            className="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition"
+            className="text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 px-4 py-2 rounded-lg transition"
           >
             View Profile
           </button>
