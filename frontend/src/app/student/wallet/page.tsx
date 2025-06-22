@@ -4,12 +4,18 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
+<<<<<<< HEAD
 import Nav from '@/app/Components/Nav'
 import Token from '@/app/Components/Token'
 import Folder from '@/app/Components/Folder'
 
 const TOKEN_CATEGORIES = ["Sports", "Tech", "Hackathon", "Club"]
 
+=======
+import Token from '../../Components/Token'
+import Folder from '../../Components/Folder'
+import Nav from '../../Components/Nav'
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
 export default function StudentWalletPage() {
   const { wallet, setWallet } = useWalletContext()
   const { address, isConnected } = useAccount()
@@ -78,6 +84,7 @@ export default function StudentWalletPage() {
   }))
 
   return (
+<<<<<<< HEAD
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
       <Nav />
       <main className="flex-1 p-4 sm:p-8">
@@ -87,6 +94,29 @@ export default function StudentWalletPage() {
               Welcome{name ? `, ${name}` : ''}!
             </h1>
             <p className="text-lg text-white/70">Here are your collected achievements.</p>
+=======
+    <div className="flex min-h-screen bg-[#221C3E] text-gray-300">
+      <div className="flex flex-col flex-1">
+       <Nav/>
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+          <div className="w-full max-w-4xl">
+            <div className="lg:col-span-7">
+              <h2 className="text-2xl font-bold mb-4 text-white">My Tokens</h2>
+              <div className="bg-[#2E2550] p-6 rounded-lg shadow-2xl">
+                <div className="space-y-4">
+                  <Folder />
+                  <Folder />
+                  <Folder />
+                </div>
+
+                <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-8">
+                  {achievements.map((a, i) => (
+                    <Token key={i} />
+                  ))}
+                </div>
+              </div>
+            </div>
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
           </div>
 
           {loading ? (

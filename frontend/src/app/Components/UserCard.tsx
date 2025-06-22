@@ -4,6 +4,7 @@ interface UserCardProps {
   name: string
   location: string
   school: string
+<<<<<<< HEAD
   onClick?: () => void
 }
 
@@ -13,6 +14,13 @@ function UserCard({ name, location, school, onClick }: UserCardProps) {
       className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer transform hover:-translate-y-1"
       onClick={onClick}
     >
+=======
+}
+
+function UserCard({ name, location, school }: UserCardProps) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 shadow-lg hover:shadow-xl">
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
           <div>
@@ -32,4 +40,8 @@ function UserCard({ name, location, school, onClick }: UserCardProps) {
   )
 }
 
+<<<<<<< HEAD
 export default UserCard
+=======
+export default UserCard 
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb

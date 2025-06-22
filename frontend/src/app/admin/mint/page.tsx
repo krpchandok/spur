@@ -4,7 +4,11 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
+<<<<<<< HEAD
 import TopNav from '../../Components/Nav'
+=======
+import Link from 'next/link'
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
 
 const AdminMintNFT: React.FC = () => {
   const [form, setForm] = useState({
@@ -90,7 +94,18 @@ const AdminMintNFT: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#221C3E] text-gray-300">
+<<<<<<< HEAD
       <TopNav/>
+=======
+      <div className="w-full">
+        <header className="w-full flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
+            <h1 className="text-2xl sm:text-3xl font-thin text-white">LEGITAMINT</h1>
+            <Link href="/admin/" className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
+            Back
+            </Link>
+        </header>
+      </div>
+>>>>>>> 9e68bad613a43c3566aececac8d4ec8e1009ebbb
 
       <main className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-2xl bg-[#2E2550] p-6 sm:p-8 rounded-2xl shadow-2xl">
