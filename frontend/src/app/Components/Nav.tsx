@@ -1,6 +1,6 @@
 function Nav(){
-    return (<header className="flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white">Legitamint</h1>
+    return (<header className="w-full flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
+        <h1 className="text-2xl sm:text-3xl font-thin text-white">LEGITAMINT</h1>
         <button className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
         Home
         </button>

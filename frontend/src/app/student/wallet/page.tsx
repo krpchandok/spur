@@ -6,7 +6,7 @@ import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
 import Token from '../../Components/Token'
 import Folder from '../../Components/Folder'
-
+import Nav from '../../Components/Nav'
 export default function StudentWalletPage() {
   const { wallet, setWallet } = useWalletContext()
   const { address, isConnected } = useAccount()
@@ -25,16 +25,7 @@ export default function StudentWalletPage() {
   return (
     <div className="flex min-h-screen bg-[#221C3E] text-gray-300">
       <div className="flex flex-col flex-1">
-        {/* Header */}
-        <header className="flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white">
-            VouchU
-          </h1>
-          <button className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
-            Home
-          </button>
-        </header>
-
+       <Nav/>
         <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
           <div className="w-full max-w-4xl">
             <div className="lg:col-span-7">
