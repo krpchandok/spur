@@ -6,46 +6,36 @@ export default function RegisterPage() {
   const [role, setRole] = useState('Student')
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] flex items-center justify-center px-4">
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-lg w-full max-w-md p-8">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center text-white px-4">
+      <div className="w-full max-w-md bg-white/5 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl text-center">
+        <h1 className="h-18 text-6xl font-light tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-8">
           Register
         </h1>
 
         <form className="flex flex-col gap-6">
-          {/* Name Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            className="w-full p-4 rounded-xl bg-white/10 text-white border border-white/20 focus:border-purple-400 focus:outline-none placeholder-white/50 transition duration-300"
+          />
 
-          {/* Role Select */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Role
-            </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            >
-              <option value="Student">Student</option>
-              <option value="Mentor">Mentor</option>
-            </select>
-          </div>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full p-4 rounded-xl bg-white/10 text-white border border-white/20 focus:border-purple-400 focus:outline-none placeholder-white/50 transition duration-300 appearance-none"
+          >
+            <option value="Student">Student</option>
+            <option value="Admin">Admin</option>
+          </select>
 
-          {/* Submit */}
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 transition text-white text-sm font-medium py-3 rounded-lg"
+            className="w-full flex items-center justify-center px-8 py-3 rounded-2xl font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1"
           >
-            Register with Wallet
+            <span>Register with Wallet</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
           </button>
         </form>
       </div>
