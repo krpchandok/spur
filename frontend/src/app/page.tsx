@@ -25,7 +25,7 @@ export default function HomePage() {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-role/${address}`)
         const role = res.data.role
 
-        if (role === 'admin') router.push('/admin/mint')
+        if (role === 'admin') router.push('/admin')
         else if (role === 'student') router.push('/student/wallet')
         else console.warn('Unknown role:', role)
       } catch (err) {

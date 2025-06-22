@@ -1,16 +1,17 @@
-type TokenProps = {
-  activityName: string
+interface TokenProps {
+  activityName: string;
+  activityType: string;
+  image?: string;
 }
 
-export default function Token({ activityName }: TokenProps) {
+export default function Token({ activityName, activityType, image }: TokenProps) {
   return (
-    <div className="flex flex-col items-center space-y-2">
-      <div className="h-36 w-36 bg-purple-400/10 rounded-full flex items-center justify-center">
-        <span className="text-purple-300 text-xs"></span>
-      </div>
-      <p className="text-sm text-purple-300 truncate w-full text-center">
-        {activityName}
-      </p>
+    <div className="bg-white rounded-lg p-3 text-black shadow-lg">
+      {image && (
+        <img src={image} alt={activityName} className="w-full h-32 object-cover rounded-md mb-2" />
+      )}
+      <h3 className="font-bold">{activityName}</h3>
+      <p className="text-sm text-gray-600">{activityType}</p>
     </div>
-  )
+  );
 }

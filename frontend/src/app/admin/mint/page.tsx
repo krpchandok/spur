@@ -149,7 +149,7 @@ const AdminMintNFT: React.FC = () => {
               <option value="Club">Club</option>
               <option value="Hackathon">Hackathon</option>
               <option value="Sports">Sports</option>
-              <option value="Volunteer">Volunteer</option>
+              <option value="Tech">Tech</option>
             </select>
 
             <input

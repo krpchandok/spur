@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
-import { registerUser, mintAchievement, getStudentAchievements, getUserRole, generateProfile, getUserName } from './routes'
+import { registerUser, mintAchievement, getStudentAchievements, getUserRole, generateProfile, getUserName, getAllStudents } from './routes'
 
 const app = express()
 const upload = multer()
@@ -21,6 +21,7 @@ app.get('/generate-profile/:wallet', generateProfile)
 app.get('/get-role/:wallet', getUserRole);
 app.get('/get-name/:wallet', getUserName);
 app.post('/mint', upload.single('image'), mintAchievement)
+app.get('/students', getAllStudents)
 
 
 

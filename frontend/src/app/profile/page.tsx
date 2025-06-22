@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../providers/WalletProvider'
 
-export default function ProfilePage() {
+export default function ProfilePage(walletId: string) {
   const { wallet } = useWalletContext()
   const [achievements, setAchievements] = useState<any[]>([])
   const [summary, setSummary] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [ role, setRole ] = useState('')
 
   // Fetch achievements
   useEffect(() => {
@@ -26,6 +27,22 @@ export default function ProfilePage() {
 
     fetchAchievements()
   }, [wallet])
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (!wallet) return
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-role/${wallet}`)
+        console.log(res.data.role)
+      } catch (err) {
+        console.error('Failed to fetch achievements', err)
+        setError('Could not load achievements')
+      }
+    }
+
+    fetchRole()
+  }, [wallet])
+
 
   // AI Summary generator
   const generateSummary = async () => {
@@ -44,6 +61,14 @@ export default function ProfilePage() {
       setLoading(false)
     }
   }
+  if (role === 'admin') {
+    return (
+      <div className="min-h-screen bg-gray-100 p-10">
+        <h1 className="text-3xl font-bold text-gray-800">👑 Admin Profile</h1>
+        <p className="mt-4 text-gray-600">You have administrative privileges. Visit the admin dashboard to manage the system.</p>
+      </div>
+    )
+  } else {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 sm:p-10">
@@ -94,4 +119,5 @@ export default function ProfilePage() {
       </div>
     </div>
   )
+}
 }

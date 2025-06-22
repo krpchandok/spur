@@ -8,6 +8,9 @@ import Configuration from 'openai'
 import multer from 'multer'
 import axios from 'axios'
 import FormData from 'form-data'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
 
 
 dotenv.config()
@@ -51,6 +54,8 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 }
 
+
+
 export const mintAchievement = async (req: Request, res: Response) => {
   const { studentWallet, activityName, activityType, description } = req.body;
   const file = req.file;
@@ -60,8 +65,11 @@ export const mintAchievement = async (req: Request, res: Response) => {
   }
 
   try {
-    const imageData = new FormData()
-    imageData.append('file', file.buffer, file.originalname)
+    const tempPath = path.join(os.tmpdir(), file.originalname);
+    fs.writeFileSync(tempPath, file.buffer);
+
+    const imageData = new FormData();
+    imageData.append('file', fs.createReadStream(tempPath));
 
     const imageRes = await axios.post(
       'https://api.pinata.cloud/pinning/pinFileToIPFS',
@@ -74,12 +82,15 @@ export const mintAchievement = async (req: Request, res: Response) => {
           pinata_secret_api_key: PINATA_SECRET_API_KEY!,
         },
       }
-    )
+    );
+
+    // Cleanup temp file
+    fs.unlinkSync(tempPath);
 
     const imageCID = imageRes.data.IpfsHash;
     const imageURI = `ipfs://${imageCID}`;
 
-    // Build metadata
+    // Upload metadata
     const metadata = {
       name: activityName,
       description,
@@ -101,6 +112,7 @@ export const mintAchievement = async (req: Request, res: Response) => {
     const metadataCID = metadataRes.data.IpfsHash;
     const tokenURI = `ipfs://${metadataCID}`;
 
+    // Mint NFT
     const tx = await contract.connect(signer).mintAchievement(
       studentWallet,
       activityName,
@@ -116,6 +128,7 @@ export const mintAchievement = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Minting failed' });
   }
 };
+
 
 
 export const getStudentAchievements = async (req: Request, res: Response) => {
@@ -135,6 +148,7 @@ export const getStudentAchievements = async (req: Request, res: Response) => {
       activityType: a.activityType,
       timestamp: a.timestamp.toString(),
       issuedBy: a.issuedBy,
+      tokenURI: a.tokenURI,
     }));
 
     return res.status(200).json({ achievements });
@@ -146,8 +160,6 @@ export const getStudentAchievements = async (req: Request, res: Response) => {
 
 
 
-import { Request, Response } from 'express'
-import OpenAI from 'openai'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_SECRET_KEY!,
@@ -264,3 +276,20 @@ export const getUserName = async (req: Request, res: Response) => {
   }
 };
 
+
+export const getAllStudents = async (_req: Request, res: Response) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('wallet, name')
+      .eq('role', 'student');
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.status(200).json({ students: data });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Unexpected error' });
+  }
+};

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
-import TopNav from '@/app/components/topbar'
+import Nav from '@/app/components/Nav'
 import Token from '@/app/components/Token'
 import Folder from '@/app/components/Folder'
 
@@ -25,23 +25,42 @@ export default function StudentWalletPage() {
     }
   }, [wallet, address, isConnected, setWallet])
 
+  
 
   useEffect(() => {
     const fetchAchievements = async () => {
-      if (!wallet) return
+      if (!wallet) return;
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/achievements/${wallet}`)
-        setAchievements(res.data.achievements)
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/achievements/${wallet}`);
+        const raw = res.data.achievements;
+  
+        const withMetadata = await Promise.all(
+          raw.map(async (a: any) => {
+            try {
+              const ipfsUrl = a.tokenURI.replace('ipfs://', 'https://gateway.pinata.cloud/ipfs/');
+              const metadataRes = await axios.get(ipfsUrl);
+              return {
+                ...a,
+                image: metadataRes.data.image?.replace('ipfs://', 'https://gateway.pinata.cloud/ipfs/'),
+              };
+            } catch {
+              return a;
+            }
+          })
+        );
+  
+        setAchievements(withMetadata);
       } catch (err) {
-        console.error('Failed to fetch achievements', err)
-        setError('Could not load achievements')
+        console.error('Failed to fetch achievements', err);
+        setError('Could not load achievements');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-
-    fetchAchievements()
-  }, [wallet])
+    };
+  
+    fetchAchievements();
+  }, [wallet]);
+  
 
   if (error) return <p className="text-red-500 p-4">{error}</p>
 
@@ -53,7 +72,7 @@ export default function StudentWalletPage() {
   return (
     <div className="flex min-h-screen bg-[#221C3E] text-gray-300">
       <div className="flex flex-col flex-1">
-        <TopNav />
+        <Nav />
 
         <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
           <div className="w-full max-w-4xl">
@@ -76,10 +95,11 @@ export default function StudentWalletPage() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                       {group.tokens.map((a, i) => (
                         <Token
-                          key={`${group.type}-${i}`}
-                          activityName={a.activityName}
-                          activityType={a.activityType}
-                        />
+                        activityName={a.activityName}
+                        activityType={a.activityType}
+                        image={a.image}
+                      />
+                        
                       ))}
                     </div>
                   </Folder>
