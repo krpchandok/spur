@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Nav from "@/app/Components/Nav"
+import UserCard from "@/app/Components/UserCard"
 function AdminSearchPage() {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -72,8 +73,16 @@ function AdminSearchPage() {
           </div>
       </form>
       </div>}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full max-w-7xl px-4">
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+            <UserCard name="John Doe" location="New York" school="Columbia University" />
+        </div>
     </div>
-  )
+  ) 
 }
 
 export default AdminSearchPage
