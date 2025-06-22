@@ -104,6 +104,9 @@ export const getStudentAchievements = async (req: Request, res: Response) => {
 
 
 
+import { Request, Response } from 'express'
+import OpenAI from 'openai'
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_SECRET_KEY!,
 })
@@ -113,6 +116,19 @@ export const generateProfile = async (req: Request, res: Response) => {
 
   if (!wallet) {
     return res.status(400).json({ error: 'Wallet address is required' })
+  }
+
+  // Fallback for testing
+  if (process.env.DEV_MODE === 'true') {
+    return res.json({
+      summary:
+        "This student shows analytical thinking and strategic depth through their involvement in Chess Club. Their extracurricular activity suggests strong focus, patience, and a drive for continual improvement.",
+    })
+  }
+
+  // Check API key explicitly (defensive)
+  if (!process.env.OPENAI_SECRET_KEY) {
+    return res.status(500).json({ error: 'Missing OpenAI API key' })
   }
 
   try {
@@ -141,7 +157,7 @@ Write a brief recruiter-facing profile summary that highlights:
 4. Growth potential
 
 Make it sound impressive but honest. Avoid listing dates or exact activities again.
-    `
+    `.trim()
 
     // 3. Call OpenAI
     const response = await openai.chat.completions.create({
@@ -149,14 +165,20 @@ Make it sound impressive but honest. Avoid listing dates or exact activities aga
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const summary = response.choices[0].message?.content
+    const summary = response.choices?.[0]?.message?.content?.trim()
+
+    if (!summary) {
+      console.error('OpenAI returned no summary:', response)
+      return res.status(500).json({ error: 'No summary generated' })
+    }
 
     return res.status(200).json({ summary })
   } catch (err: any) {
-    console.error('Profile generation failed:', err)
+    console.error('AI profile generation failed:', err?.response?.data || err.message || err)
     return res.status(500).json({ error: 'AI profile generation failed' })
   }
 }
+
 
 export const getUserRole = async (req: Request, res: Response) => {
   const { wallet } = req.params;

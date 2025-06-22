@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
+import TopNav from '@/app/components/topbar'
 
 export default function StudentWalletPage() {
   const { wallet, setWallet } = useWalletContext()
@@ -38,6 +39,7 @@ export default function StudentWalletPage() {
 
   return (
     <div>
+      <TopNav />
       <h2>Your Achievements</h2>
       {achievements.length === 0 ? (
         <p>No achievements found.</p>

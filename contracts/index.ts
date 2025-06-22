@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { registerUser, mintAchievement, getStudentAchievements, getUserRole } from './routes'
+import { registerUser, mintAchievement, getStudentAchievements, getUserRole, generateProfile } from './routes'
 
 const app = express()
 app.use(cors({
@@ -15,6 +15,7 @@ app.get('/', (_req, res) => {
 app.post('/register', registerUser)
 app.post('/mint', mintAchievement)
 app.get('/achievements/:wallet', getStudentAchievements)
+app.get('/generate-profile/:wallet', generateProfile)
 app.get('/get-role/:wallet', getUserRole);
 
 

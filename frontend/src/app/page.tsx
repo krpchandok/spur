@@ -6,17 +6,17 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import axios from 'axios'
-import LoginPage from './Login/page'
 
 export default function HomePage() {
   const { address, isConnected } = useAccount()
   const { setWallet } = useWalletContext()
   const router = useRouter()
   const [checking, setChecking] = useState(false)
+  const [readyToCheck, setReadyToCheck] = useState(false)
 
   useEffect(() => {
     const checkRole = async () => {
-      if (!isConnected || !address) return
+      if (!isConnected || !address || !readyToCheck) return
 
       setWallet(address)
       setChecking(true)
@@ -36,19 +36,41 @@ export default function HomePage() {
     }
 
     checkRole()
-  }, [isConnected, address])
-
-  const loginPage = () => {
-    router.push("/Login")
-  }
+  }, [isConnected, address, readyToCheck])
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">Welcome</h1>
-      <p>Please connect your wallet to continue.</p>
-      <ConnectButton />
-      <LoginPage /> 
-      {checking && <p className="mt-4 text-sm text-gray-500">Checking your role...</p>}
-    </div>
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#293f7b] px-4 sm:px-6">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 sm:p-12 w-full max-w-xl text-center border border-gray-200">
+        {/* Logo or Company Name */}
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-900 mb-20 tracking-tight font-sans">
+            LEGITIMINT
+        </h1>
+
+
+        {!isConnected && <p className="text-lg text-gray-600 mb-8">
+          Connect your wallet to access your personalized dashboard.
+        </p>}
+
+        {/* Wallet Connect */}
+        <div className="flex justify-center mb-6">
+          <ConnectButton />
+        </div>
+
+        {/* Continue button */}
+        {isConnected && (
+          <button
+            onClick={() => setReadyToCheck(true)}
+            className="mt-4 w-full sm:w-auto px-8 py-3 bg-indigo-700 text-white font-medium text-base rounded-xl hover:bg-indigo-900 transition shadow-md"
+          >
+            CONTINUE
+          </button>
+        )}
+
+        {/* Role checking loader */}
+        {checking && (
+          <p className="mt-4 text-sm text-gray-500">🔍 Verifying your role...</p>
+        )}
+      </div>
+    </main>
   )
 }
