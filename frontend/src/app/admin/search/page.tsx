@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import Nav from "@/app/Components/Nav"
 import UserCard from "@/app/Components/UserCard"
+import Link from "next/link"
 function AdminSearchPage() {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -32,8 +32,14 @@ function AdminSearchPage() {
  
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 gap-8">
-      <Nav/>
-
+      <div className="w-full">
+        <header className="w-full flex justify-between items-center p-4 sm:p-6 bg-[#2E2550] border-b border-white/10">
+            <h1 className="text-2xl sm:text-3xl font-thin text-white">LEGITAMINT</h1>
+            <Link href="/admin/" className="bg-[#6D28D9] text-white px-4 py-2 sm:px-6 rounded-lg font-semibold hover:bg-[#5B21B6] transition">
+            Back
+            </Link>
+        </header>
+      </div>
       <div className="flex flex-col items-center justify-center gap-6 w-full max-w-4xl px-4">
         <h1 className="text-5xl font-light text-white tracking-wide">Search</h1>
         <input className="w-1/2 p-4 rounded-2xl bg-white/10 backdrop-blur-sm text-white border border-white/20 focus:border-purple-400 focus:outline-none text-lg placeholder-white/60" placeholder="Search for a student" />
