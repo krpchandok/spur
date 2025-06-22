@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import TopNav from "@/app/components/topbar"
-import UserCard from "@/app/components/UserCard"
-import CardModal from "@/app/components/CardModal"
+import TopNav from "@/app/Components/topbar"
+import UserCard from "@/app/Components/UserCard"
+import CardModal from "@/app/Components/CardModal"
 import Link from "next/link"
 
 function AdminSearchPage() {

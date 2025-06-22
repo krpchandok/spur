@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useWalletContext } from '../../providers/WalletProvider'
 import { useAccount } from 'wagmi'
-import TopNav from '@/app/components/topbar'
+import TopNav from '../../Components/Nav'
 
 const AdminMintNFT: React.FC = () => {
   const [form, setForm] = useState({
